@@ -1,0 +1,121 @@
+@page "/Scoring"
+@using CTFOt.SQLManagement.Definitions
+@using CTFOt.SQLManagement.Services
+@inject ICTFTeamServices _TeamServices
+@inject ICTFUsersServices _UsersServices
+@inject ICTFEtapesServices _EtapesServices
+@inject ICTFScoringServices _ScoringServices
+
+<h3>Scoring</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 my-5">
+            <RadzenChart>
+                @foreach (var teams in Teams)
+                {
+                    if (GetScoByTeamAsync(teams.Id))
+                    {
+                        <RadzenLineSeries Smooth="false" Data=@BufferScore CategoryProperty="DateTime" Title=@teams.Name LineType="LineType.Dashed" ValueProperty="Points">
+                            <RadzenMarkers MarkerType="MarkerType.Square"/>
+                            <RadzenSeriesDataLabels Visible="false"/>
+                        </RadzenLineSeries>
+                    }
+                }
+                <RadzenCategoryAxis Padding="20"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true"/>
+                    <RadzenAxisTitle Text="Points"/>
+                </RadzenValueAxis>
+            </RadzenChart>
+        </div>
+    </div>
+</div>
+
+<RadzenDataList AllowVirtualization=false Style="height:400px;overflow:auto;" 
+                    WrapItems="true" AllowPaging="true"
+                    Data="@ScoreAh" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+    <Template Context="product">
+        @if (product.Points != 0)
+        {
+            <RadzenCard Style="width: 100%; padding: 0;">
+                <RadzenRow Gap="0">
+                    <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4 product-title">
+                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(GetTeamName(product.IdTeam))</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Nom</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(GetEtapeName(product.IdEtape))</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Joueur</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(GetPlayerName(product.IdPlayer))</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="3" Class="rz-text-align-start rz-text-align-lg-end">
+                                <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Shade="Shade.Lighter" class="price-badge" Text=@(GetScoreEtape(product.IdEtape)) />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        }
+    </Template>
+    </RadzenDataList>
+
+@code {
+
+    List<CTFTeams> Teams;
+    List<CTFUsers> Players;
+    List<CTFEtapes> Etapes;
+    List<CTFScoring> BufferScore;
+    List<CTFScoring> ScoreAh;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        Teams = await _TeamServices.GetTeamsAsync();
+        Players = await _UsersServices.GetUsersAsync();
+        Etapes = await _EtapesServices.GetEtapesAsync();
+        ScoreAh = await _ScoringServices.GetScoringAsync();
+
+        var timer = new Timer(new TimerCallback(_ => InvokeAsync(StateHasChanged)), null, 0, 5000);
+
+    }
+    
+    public string GetTeamName(int TeamId)
+    {
+        return Teams.Where(x => x.Id == TeamId).FirstOrDefault().Name;
+    }
+    
+    public string GetPlayerName(int PlayerId)
+    {
+        return Players.Where(x => x.Id == PlayerId).FirstOrDefault().Pseudo;
+    }
+
+    public string GetEtapeName(int EtapeId)
+    {
+        return Etapes.Where(x => x.Id == EtapeId).FirstOrDefault().Name;
+    }
+
+    public string GetScoreEtape(int EtapeId)
+    {
+        return Etapes.Where(x => x.Id == EtapeId).FirstOrDefault().Points.ToString();
+    }
+    
+    public bool GetScoByTeamAsync(int TeamId)
+    {
+        try
+        {
+            BufferScore = _ScoringServices.GetScoringByTeam(TeamId);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+}

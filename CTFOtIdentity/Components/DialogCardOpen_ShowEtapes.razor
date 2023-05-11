@@ -1,0 +1,169 @@
+@using CTFOt.SQLManagement.Services
+@using CTFOt.SQLManagement.Definitions
+@inject NotificationService NotificationService
+@inject ICTFEtapesServices _etapesServices
+@inject ICTFRessourcesServices _ressourcesServices
+@inject ICTFScoringServices _flagServices
+@inject IJSRuntime JSRuntime;
+
+<RadzenTabs TabPosition="TabPosition.Top" RenderMode="TabRenderMode.Client">
+    <Tabs>
+        @foreach (var eta in etapes)
+        {
+            @if (eta.LinkedChalls == (int)eid)
+            {
+                @if (eta.Actif)
+                {   
+                    @isDone(1, eta.Id);
+                    <RadzenTabsItem Text=@($"{eta.Name} - ({eta.Points})") Icon="@setIcon">
+                        <RadzenCard Class="rz-my-1 rz-mx-auto" Style="width: auto">
+                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-2">
+                                <RadzenImage Path=@eta.Img Style="width: 100px; height: 100px; border-radius: 50%;"/>
+                                <RadzenStack Gap="0">
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-1 rz-my-0">Nom du challenge</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1"><b>@eta.Name</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-3 rz-mb-0">Description</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1"><b>@eta.Description</b></RadzenText>
+                                </RadzenStack>
+                            </RadzenStack>
+                            <RadzenCard class="rz-background-color-primary-lighter rz-shadow-0 rz-border-radius-0 rz-p-4" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                                <RadzenText TextStyle="TextStyle.H6" class="rz-color-primary-light"><strong>Ressources associés</strong></RadzenText>
+                                <RadzenStack Gap="0">
+                                    <RadzenRow class="rz-text-align-center" Gap="1rem">
+                                        @if (GetRessources(eta.Id))
+                                        {
+                                            @foreach (var ent in FilesFixed)
+                                            {
+                                                <RadzenColumn Size="6">
+                                                    <RadzenCard Style="width: auto">
+                                                        <RadzenRow class="rz-text-align-center" Gap="1rem">
+                                                            <RadzenFormField Text="Fichiers" Style="width: 100%; height: auto;">
+                                                                <Start><RadzenImage Path="https://cdn.icon-icons.com/icons2/3953/PNG/512/folder_icon_251975.png" Style="width: 40px; height: 40px"></RadzenImage></Start>
+                                                                <ChildContent><RadzenText TextStyle="TextStyle.Body1" Style="text-align: left; margin-right: auto; margin-left: 0; display: block;" class="rz-color-primary-light">@ent.Name</RadzenText></ChildContent>
+                                                                <End><RadzenButton Click="@(args => DownloadFileFromURL(ent.Link, ent.Name))" Style="margin-left: auto; margin-right: 0; display: block;" Icon="download"/></End>
+                                                            </RadzenFormField>
+                                                        </RadzenRow>
+                                                    </RadzenCard>
+                                                </RadzenColumn>
+                                            }
+                                        }
+                                        @if (GetRessources(eta.Id))
+                                        {
+                                            @foreach (var ent in LinksFixed)
+                                            {
+                                                <RadzenColumn Size="6">
+                                                    <RadzenCard Style="width: auto">
+                                                        <RadzenRow class="rz-text-align-center" Gap="1rem">
+                                                            <RadzenFormField Text="Site Web" Style="width: 100%; height: auto;">
+                                                                <Start><RadzenImage Path="https://cdn.icon-icons.com/icons2/3953/PNG/512/server_icon_251805.png" Style="width: 40px; height: 40px"></RadzenImage></Start>
+                                                                <ChildContent><RadzenText TextStyle="TextStyle.Body1" Style="text-align: left; margin-right: auto; margin-left: 0; display: block;" class="rz-color-primary-light">@ent.Name</RadzenText></ChildContent>
+                                                                <End><RadzenButton Click="@(args => OpenLink(ent.Link))" Style="margin-left: auto; margin-right: 0; display: block;" Icon="open_in_new"/></End>
+                                                            </RadzenFormField>
+                                                        </RadzenRow>
+                                                    </RadzenCard>
+                                                </RadzenColumn>
+                                            }
+                                        }
+                                    </RadzenRow>
+                                </RadzenStack>
+                            </RadzenCard>
+                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" AlignItems="AlignItems.Center" Gap="0rem">
+                                <RadzenFormField Text="Flag" Style="width: 100%; height: auto;">
+                                    <Start><RadzenIcon Icon="flag"></RadzenIcon></Start>
+                                    <ChildContent><RadzenTextBox @bind-Value="@flag" Style="width: 100%;"/></ChildContent>
+                                    <End><RadzenButton Click=@(args => OnSubmitFlag(flag, 1, eta.Name, eta.Id)) Icon="check" Style="width: 5px; height: 5px;"/></End>
+                                </RadzenFormField>
+                            </RadzenStack>
+                        </RadzenCard>
+                    </RadzenTabsItem>
+                }
+                else
+                {
+                    <RadzenTabsItem Text=@($"{eta.Name} - ({eta.Points})") Disabled="true" />
+                }
+            }
+        }
+    </Tabs>
+</RadzenTabs>
+
+@code {
+    [Parameter]
+    public object eid { get; set; }
+    List<CTFEtapes> etapes;
+    List<CTFUsers> users;
+    int response;
+    string flag;
+    string setIcon;
+
+    List<CTFRessources> FilesFixed;
+    List<CTFRessources> LinksFixed;
+
+    private string isDone(int teamId, int etapeId)
+    {
+        try
+        {
+            response = _flagServices.GetFlagIsDoneOnPlayerWithEtapes(teamId, etapeId);
+            if (response >= 1)
+            {
+                setIcon = "check";
+                return "";
+            }
+            else
+            {
+                setIcon = "close";
+                return "";
+            }
+        } catch (Exception e) {
+            Console.WriteLine(e);
+            return "";
+        }
+    }
+    
+    private async Task DownloadFileFromURL(string url, string name)
+    {
+        await JSRuntime.InvokeVoidAsync("triggerFileDownload", name, url);
+    }
+
+    private async Task OpenLink(string url)
+    {
+        await JSRuntime.InvokeAsync<object>("open", url, "_blank");
+    }
+    
+    public bool GetRessources(int eta)
+    {
+        try {
+            FilesFixed = _ressourcesServices.GetRessourcesByEtapesAndTypeAsync(eta, "FILES");
+            LinksFixed = _ressourcesServices.GetRessourcesByEtapesAndTypeAsync(eta, "LINK");
+            return true;
+        } catch (Exception e) {
+            Console.WriteLine(e);
+            return false;
+        }
+
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        etapes = await _etapesServices.GetEtapesAsync();
+        
+    }
+
+    async Task OnSubmitFlag(string flag, int id, string nameChal, int chalId)
+    {
+        response = await _etapesServices.SubmitFlagAsync(flag, id, chalId);
+        if (response == 1)
+        {
+            NotificationService.Notify(NotificationSeverity.Success, $"Flag validé", $"Vous avez validé le flag du challenge {nameChal}");
+        } else if (response == 2)
+        {
+            NotificationService.Notify(NotificationSeverity.Info, $"Flag déjà validé", $"Vous avez déjà validé le flag du challenge {nameChal}");
+        }
+        else
+        {
+            NotificationService.Notify(NotificationSeverity.Error, $"Flag invalide", $"Le flag que vous avez entré est invalide");
+        }
+    }
+    
+}

@@ -1,0 +1,97 @@
+﻿@page "/"
+@using CTFOt.SQLManagement.Services
+@using CTFOt.SQLManagement.Definitions
+@inject ICTFUsersServices _UsersServices
+@inject ICTFTeamServices _TeamServices
+@inject ICTFCategroiesServices _CategroiesServices
+@inject ICTFChallsServices _ChallsServices
+@inject ICTFEtapesServices _EtapesServices
+@inject ICTFScoringServices _ScoringServices
+
+<PageTitle>Accueil</PageTitle>
+
+<h1>Bienvenue <b>@MyUsers</b> !</h1>
+<h2>Ton équipe est <b>@MyTeamName</b></h2>
+
+Voilà un petit résumé du CTF en cours :
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            @if(CantLoadScore)
+            {
+                <p>Il n'y a pas encore de données à afficher</p>
+            }
+            else
+            {
+                <RadzenChart>
+                    <RadzenStackedColumnSeries Data="@EtapesNotCompleted" CategoryProperty="Categorie" Title="Non résolu" LineType="LineType.Dashed" ValueProperty="Actif">
+                        <RadzenSeriesDataLabels Visible="false"/>
+                    </RadzenStackedColumnSeries>
+                    <RadzenStackedColumnSeries Data="@EtapesCompleted" CategoryProperty="Categorie" Title="Résolu" ValueProperty="Actif">
+                        <RadzenSeriesDataLabels Visible="false"/>
+                    </RadzenStackedColumnSeries>
+                    <RadzenColumnOptions Radius="5"/>
+                    <RadzenValueAxis Min="0" Max="20" Step="5">
+                        <RadzenGridLines Visible="true"/>
+                        <RadzenAxisTitle Text="Nombre d'Etapes"/>
+                    </RadzenValueAxis>
+                </RadzenChart>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    List<CTFUsers> Users;
+    List<CTFTeams> Teams;
+    List<CTFEtapes> Etapes;
+    List<CTFEtapes> EtapesCompleted;
+    List<CTFEtapes> EtapesNotCompleted;
+    List<CTFScoring> Scoring;
+    bool CantLoadScore;
+    
+    string MyUsers;
+    int MyUsersId;
+    int MyTeamId;
+    string MyTeamName;
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        Users = await _UsersServices.GetUsersAsync();
+        Teams = await _TeamServices.GetTeamsAsync();
+        Etapes = await _EtapesServices.GetEtapesAsync();
+        
+        MyUsers = "Rhenar";
+        MyUsersId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.Id).FirstOrDefault();
+        MyTeamId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.TeamId).FirstOrDefault();
+        MyTeamName = Teams.Where(x => x.Id == MyTeamId).Select(x => x.Name).FirstOrDefault();
+        
+        Scoring = await _ScoringServices.GetScoringByTeamAsync(MyTeamId);
+        foreach (var a in Scoring)
+        {
+            if (a.Points > 0)
+            {
+                CantLoadScore = false;
+                break;
+            } else
+            {
+                CantLoadScore = true;
+            }
+        }
+        try
+        {
+            EtapesCompleted = _EtapesServices.GetItCompleted(Scoring);
+            EtapesNotCompleted = _EtapesServices.GetItNonCompleted(EtapesCompleted);
+        } catch (Exception e)
+        {
+            CantLoadScore = true;
+        }
+
+    }
+    
+
+}

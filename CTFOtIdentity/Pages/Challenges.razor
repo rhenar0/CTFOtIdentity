@@ -1,0 +1,60 @@
+@page "/Challenges"
+@using CTFOt.SQLManagement.Definitions
+@using CTFOt.SQLManagement.Services
+@using CTFOt.Components
+
+@inject DialogService DialogService
+@inject ICTFCategroiesServices _categoriesServices
+@inject ICTFChallsServices _challsServices
+@inject ICTFEtapesServices _etapesServices
+@inject DialogCardOpen_ShowEtapes _DCO_ShowEtapes
+
+<h3>Challenges</h3>
+
+<RadzenTabs RenderMode="TabRenderMode.Client" TabPosition="TabPosition.Left">
+    <Tabs>
+        @foreach (var cat in categories)
+        {
+            <RadzenTabsItem Text=@cat.Name>
+                <RadzenRow class="rz-text-align-center" Gap="1rem">
+                @foreach (var chall in challs)
+                {
+                    @if (chall.IDCategories == cat.Id)
+                    {
+                        <RadzenColumn Size="4">
+                            <RadzenCard Style="flex: 1;">
+                                <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
+                                    <RadzenImage Path=@chall.Image Style="width: 80px; height: 80px; border-radius: 50%"/>
+                                    <RadzenStack>
+                                        <RadzenText TextStyle="TextStyle.Subtitle1" TagName="TagName.P" TextAlign="TextAlign.Center">@chall.Name</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Body2" TextAlign="TextAlign.Center">Petite description</RadzenText>
+                                        <RadzenButton Click=@(args => OpenChall(chall.Name, chall.Id))>Lancer !</RadzenButton>
+                                        </RadzenStack>
+                                </RadzenStack>
+                            </RadzenCard>
+                        </RadzenColumn>
+                    }
+                }
+                </RadzenRow>
+            </RadzenTabsItem>
+        }
+    </Tabs>
+</RadzenTabs>
+
+@code {
+    List<CTFCategories> categories;
+    List<CTFChalls> challs;
+
+    async Task OpenChall(string name, int eid) 
+    {   
+        await DialogService.OpenAsync<DialogCardOpen_ShowEtapes>(name, new Dictionary<string, object> {{"eid", eid}}, new DialogOptions() { Width = "800px", Height = "800px", Resizable = false, Draggable = false });
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        
+        categories = await _categoriesServices.GetCategoriesAsync();
+        challs = await _challsServices.GetChallsAsync();
+    }
+}

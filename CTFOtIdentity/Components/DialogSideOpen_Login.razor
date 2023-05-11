@@ -1,0 +1,49 @@
+@using CTFOt.SQLManagement.Services
+@using CTFOt.SQLManagement.Definitions
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject ICTFUsersServices _usersServices
+
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+        <RadzenLogin AllowRegister="false" AllowResetPassword="false" Login=@(args => OnLogin(args)) />
+</RadzenCard>
+
+@code {
+        
+    string username;
+    string password;
+    List<CTFUsers> users;
+    
+    async Task OnLogin(LoginArgs args)
+    {
+        username = args.Username;
+        password = args.Password;
+
+        users = await _usersServices.GetUsersAsync();
+        
+        foreach (var user in users)
+        {
+            if (user.Pseudo == username && user.ChkPassword == password)
+            {
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, user.Pseudo),
+                    new Claim(ClaimTypes.Role, "Player")
+                };
+                
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                
+                var authProperties = new AuthenticationProperties
+                {
+                    AllowRefresh = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    IsPersistent = true,
+                };
+                
+            }
+        }
+    }
+
+}
