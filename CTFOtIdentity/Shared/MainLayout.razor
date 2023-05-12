@@ -1,20 +1,61 @@
-﻿@inherits LayoutComponentBase
+﻿@using CTFOtIdentity.Components
+@inherits LayoutComponentBase
 
-<PageTitle>CTFOtIdentity</PageTitle>
+@inject DialogService DialogService
+
+<PageTitle>CTFOt</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
     <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+            <RadzenDialog/>
+            <RadzenNotification/>
+            <RadzenContextMenu/>
+            <RadzenTooltip/>
+            <RadzenLayout>
+                <RadzenHeader>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                        <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+                        <RadzenLabel Text="CTFOt" />
+                    </RadzenStack>
+                </RadzenHeader>
+                <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+                    <RadzenPanelMenu>
+                        <RadzenPanelMenuItem Text="Accueil" Icon="home" Path=""/>
+                        <AuthorizeView>
+                            <NotAuthorized>
+                                <RadzenPanelMenuItem Text="Score" Icon="scoreboard" Path="Scoring"/>
+                                <RadzenPanelMenuItem Text="S'identifier" Icon="login" Path="Identity/Account/Login"/>
+                            </NotAuthorized>
+                            <Authorized>
+                                <RadzenPanelMenuItem Text="Challenges" Icon="receipt" Path="Challenges"/>
+                                <RadzenPanelMenuItem Text="Score" Icon="scoreboard" Path="Scoring"/>
+                                <RadzenPanelMenuItem Text="Mon profile" Icon="person" Path="Identity/Account/Manage"/>
+                            </Authorized>
+                            </AuthorizeView>
+                    </RadzenPanelMenu>
+                </RadzenSidebar>
+                <RadzenBody>
+                    <div class="rz-p-4">
+                        @Body
+                    </div>
+                </RadzenBody>
+                <RadzenFooter>
+                    Made with <RadzenIcon Icon="coffee" Class="rz-text-danger" Style="align-self: center"/> by Rhenar for OteriHack & Oteria Cyber School
+                </RadzenFooter>
+            </RadzenLayout>
+            
+            @code {
+                bool sidebar1Expanded = true;
+            }
+            
+            @code {
 
-        <article class="content px-4">
-            @Body
-        </article>
+                async Task OpenLogin() 
+                {   
+                    await DialogService.OpenSideAsync<DialogSideOpen_Login>("Login", new Dictionary<string, object> {}, new SideDialogOptions{ Position = DialogPosition.Right});
+                }
+
+            }
+            
     </main>
 </div>

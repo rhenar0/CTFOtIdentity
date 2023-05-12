@@ -1,8 +1,8 @@
-using CTFOt.SQLManagement.Context;
-using CTFOt.SQLManagement.Definitions;
+using CTFOtIdentity.SQLManagement.Context;
+using CTFOtIdentity.SQLManagement.Definitions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CTFOt.SQLManagement.Services;
+namespace CTFOtIdentity.SQLManagement.Services;
 
 public interface ICTFChallsServices
 {

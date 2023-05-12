@@ -1,7 +1,8 @@
-using CTFOt.SQLManagement.Definitions;
+using CTFOtIdentity.SQLManagement.Definitions;
+using CTFOtIdentity.SQLManagement.Definitions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CTFOt.SQLManagement.Context;
+namespace CTFOtIdentity.SQLManagement.Context;
 
 
 public class CTFContext : DbContext
@@ -72,11 +73,11 @@ public class CTFContext : DbContext
         {
             new CTFUsers
             {
-                Id = 1, Pseudo = "Rhenar", Score = 0, AssignedChalls = "{}", ChkPassword = "a7e4ec9e259246db346ac88b10f32901", TeamId = 1
+                Id = 1, Pseudo = "Rhenar", Mail="hugo.chassaing@orange.fr", Score = 0, AssignedChalls = "{}", ChkPassword = "a7e4ec9e259246db346ac88b10f32901", TeamId = 1
             },
             new CTFUsers
             {
-                Id = 2, Pseudo = "Segrard", Score = 100, AssignedChalls = "{1}", ChkPassword = "a7e4ec9e259246db346ac88b10f32901", TeamId = 2
+                Id = 2, Pseudo = "Segrard", Mail="hugo.chassaing@imercy.fr", Score = 100, AssignedChalls = "{1}", ChkPassword = "a7e4ec9e259246db346ac88b10f32901", TeamId = 2
             }
         };
     }

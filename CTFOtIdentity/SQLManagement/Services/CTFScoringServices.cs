@@ -1,8 +1,9 @@
-using CTFOt.SQLManagement.Definitions;
-using CTFOt.SQLManagement.Context;
+using CTFOtIdentity.SQLManagement.Definitions;
+using CTFOtIdentity.SQLManagement.Context;
 using Microsoft.EntityFrameworkCore;
+using Radzen;
 
-namespace CTFOt.SQLManagement.Services;
+namespace CTFOtIdentity.SQLManagement.Services;
 
 public interface ICTFScoringServices
 {
@@ -27,7 +28,7 @@ public class CTFScoringServices : ICTFScoringServices
 
     public async Task<List<CTFScoring>> GetScoringAsync()
     {
-        return await dbContext.CTFScoring.ToListAsync();
+        return await dbContext.CTFScoring.Where(x => x.Points != 0).ToListAsync();
     }
 
     public async Task<CTFScoring> AddScoringAsync(CTFScoring score)

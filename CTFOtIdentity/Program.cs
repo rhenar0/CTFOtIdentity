@@ -5,12 +5,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using CTFOtIdentity.Areas.Identity;
+using CTFOtIdentity.Components;
 using CTFOtIdentity.Data;
+using CTFOtIdentity.SQLManagement.Context;
+using CTFOtIdentity.SQLManagement.Services;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -18,8 +23,28 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services
+    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+
+builder.Services.AddScoped<ICTFChallsServices, CTFChallsServices>();
+builder.Services.AddScoped<ICTFCategroiesServices, CTFCategoriesServices>();
+builder.Services.AddScoped<ICTFEtapesServices, CTFEtapesServices>();
+builder.Services.AddScoped<ICTFUsersServices, CTFUsersServices>();
+builder.Services.AddScoped<ICTFGlobalServices, CTFGlobalServices>();
+builder.Services.AddScoped<ICTFTeamServices, CTFTeamsServices>();
+builder.Services.AddScoped<ICTFRessourcesServices, CTFRessourcesServices>();
+builder.Services.AddScoped<ICTFScoringServices, CTFScoringServices>();
+
+builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<TooltipService>();
+builder.Services.AddScoped<ContextMenuService>();
+builder.Services.AddScoped<DialogCardOpen_ShowEtapes>();
+
+builder.Services.AddDbContext<CTFContext>(optionsBuilder =>
+{
+    optionsBuilder.UseSqlite("Data Source = Dev_CTF.db");
+});
 
 var app = builder.Build();
 

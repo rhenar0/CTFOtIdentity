@@ -1,8 +1,8 @@
-using CTFOt.SQLManagement.Context;
-using CTFOt.SQLManagement.Definitions;
+using CTFOtIdentity.SQLManagement.Context;
+using CTFOtIdentity.SQLManagement.Definitions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CTFOt.SQLManagement.Services;
+namespace CTFOtIdentity.SQLManagement.Services;
 
 public interface ICTFUsersServices
 {
@@ -10,6 +10,7 @@ public interface ICTFUsersServices
     Task<CTFUsers> AddUsersAsync(CTFUsers users);
     Task<CTFUsers> UpdateUsersAsync(CTFUsers users);
     Task DeleteUsersAsync(CTFUsers users);
+    CTFUsers GetUserByMail(string mail);
 }
 
 public class CTFUsersServices : ICTFUsersServices
@@ -71,6 +72,12 @@ public class CTFUsersServices : ICTFUsersServices
         {
             throw;
         }
+    }
+
+    public CTFUsers GetUserByMail(string mail)
+    {
+        var Bouh = dbContext.CTFUsers.Where(l => l.Mail == mail).FirstOrDefault();
+        return Bouh;
     }
     
 }

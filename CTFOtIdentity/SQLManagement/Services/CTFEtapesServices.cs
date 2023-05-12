@@ -1,7 +1,7 @@
-using CTFOt.SQLManagement.Definitions;
+using CTFOtIdentity.SQLManagement.Definitions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CTFOt.SQLManagement.Services;
+namespace CTFOtIdentity.SQLManagement.Services;
 using Definitions;
 using Context;
 

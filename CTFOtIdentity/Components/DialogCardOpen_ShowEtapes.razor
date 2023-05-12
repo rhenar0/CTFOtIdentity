@@ -1,9 +1,13 @@
-@using CTFOt.SQLManagement.Services
-@using CTFOt.SQLManagement.Definitions
+@using CTFOtIdentity.SQLManagement.Services
+@using CTFOtIdentity.SQLManagement.Definitions
+@using System.Security.Claims
 @inject NotificationService NotificationService
 @inject ICTFEtapesServices _etapesServices
 @inject ICTFRessourcesServices _ressourcesServices
 @inject ICTFScoringServices _flagServices
+@inject ICTFUsersServices _UsersServices
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+
 @inject IJSRuntime JSRuntime;
 
 <RadzenTabs TabPosition="TabPosition.Top" RenderMode="TabRenderMode.Client">
@@ -26,7 +30,7 @@
                                     <RadzenText TextStyle="TextStyle.Body1"><b>@eta.Description</b></RadzenText>
                                 </RadzenStack>
                             </RadzenStack>
-                            <RadzenCard class="rz-background-color-primary-lighter rz-shadow-0 rz-border-radius-0 rz-p-4" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                            <RadzenCard class="rz-background-color-primary-lighter rz-shadow-0 rz-border-radius-0 rz-p-4" style="margin: 1rem">
                                 <RadzenText TextStyle="TextStyle.H6" class="rz-color-primary-light"><strong>Ressources associés</strong></RadzenText>
                                 <RadzenStack Gap="0">
                                     <RadzenRow class="rz-text-align-center" Gap="1rem">
@@ -71,7 +75,7 @@
                                 <RadzenFormField Text="Flag" Style="width: 100%; height: auto;">
                                     <Start><RadzenIcon Icon="flag"></RadzenIcon></Start>
                                     <ChildContent><RadzenTextBox @bind-Value="@flag" Style="width: 100%;"/></ChildContent>
-                                    <End><RadzenButton Click=@(args => OnSubmitFlag(flag, 1, eta.Name, eta.Id)) Icon="check" Style="width: 5px; height: 5px;"/></End>
+                                    <End><RadzenButton Click=@(args => OnSubmitFlag(flag, idUser, eta.Name, eta.Id)) Icon="check" Style="width: 5px; height: 5px;"/></End>
                                 </RadzenFormField>
                             </RadzenStack>
                         </RadzenCard>
@@ -94,6 +98,9 @@
     int response;
     string flag;
     string setIcon;
+    string MailUser;
+    CTFUsers HelloUser;
+    int idUser;
 
     List<CTFRessources> FilesFixed;
     List<CTFRessources> LinksFixed;
@@ -147,7 +154,11 @@
         await base.OnInitializedAsync();
 
         etapes = await _etapesServices.GetEtapesAsync();
-        
+        MailUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+
+        HelloUser = _UsersServices.GetUserByMail(MailUser);
+        idUser = HelloUser.Id;
+
     }
 
     async Task OnSubmitFlag(string flag, int id, string nameChal, int chalId)

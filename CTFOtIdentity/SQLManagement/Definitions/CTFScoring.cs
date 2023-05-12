@@ -1,4 +1,4 @@
-namespace CTFOt.SQLManagement.Definitions;
+namespace CTFOtIdentity.SQLManagement.Definitions;
 
 public class CTFScoring
 {

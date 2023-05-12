@@ -1,46 +1,53 @@
 ﻿@page "/"
-@using CTFOt.SQLManagement.Services
-@using CTFOt.SQLManagement.Definitions
+@using CTFOtIdentity.SQLManagement.Services
+@using CTFOtIdentity.SQLManagement.Definitions
+@using System.Security.Claims
 @inject ICTFUsersServices _UsersServices
 @inject ICTFTeamServices _TeamServices
-@inject ICTFCategroiesServices _CategroiesServices
-@inject ICTFChallsServices _ChallsServices
 @inject ICTFEtapesServices _EtapesServices
 @inject ICTFScoringServices _ScoringServices
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
 
 <PageTitle>Accueil</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <h1>Bienvenue <b>@MyUsers</b> !</h1>
+        <h2>Ton équipe est <b>@MyTeamName</b></h2>
 
-<h1>Bienvenue <b>@MyUsers</b> !</h1>
-<h2>Ton équipe est <b>@MyTeamName</b></h2>
+        Voilà un petit résumé du CTF en cours pour ton équipe :
 
-Voilà un petit résumé du CTF en cours :
-
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            @if(CantLoadScore)
-            {
-                <p>Il n'y a pas encore de données à afficher</p>
-            }
-            else
-            {
-                <RadzenChart>
-                    <RadzenStackedColumnSeries Data="@EtapesNotCompleted" CategoryProperty="Categorie" Title="Non résolu" LineType="LineType.Dashed" ValueProperty="Actif">
-                        <RadzenSeriesDataLabels Visible="false"/>
-                    </RadzenStackedColumnSeries>
-                    <RadzenStackedColumnSeries Data="@EtapesCompleted" CategoryProperty="Categorie" Title="Résolu" ValueProperty="Actif">
-                        <RadzenSeriesDataLabels Visible="false"/>
-                    </RadzenStackedColumnSeries>
-                    <RadzenColumnOptions Radius="5"/>
-                    <RadzenValueAxis Min="0" Max="20" Step="5">
-                        <RadzenGridLines Visible="true"/>
-                        <RadzenAxisTitle Text="Nombre d'Etapes"/>
-                    </RadzenValueAxis>
-                </RadzenChart>
-            }
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    @if (CantLoadScore)
+                    {
+                        <p>Il n'y a pas encore de données à afficher</p>
+                    }
+                    else
+                    {
+                        <RadzenChart>
+                            <RadzenStackedColumnSeries Data="@EtapesNotCompleted" CategoryProperty="Categorie" Title="Non résolu" LineType="LineType.Dashed" ValueProperty="Actif">
+                                <RadzenSeriesDataLabels Visible="false"/>
+                            </RadzenStackedColumnSeries>
+                            <RadzenStackedColumnSeries Data="@EtapesCompleted" CategoryProperty="Categorie" Title="Résolu" ValueProperty="Actif">
+                                <RadzenSeriesDataLabels Visible="false"/>
+                            </RadzenStackedColumnSeries>
+                            <RadzenColumnOptions Radius="5"/>
+                            <RadzenValueAxis Min="0" Max="20" Step="5">
+                                <RadzenGridLines Visible="true"/>
+                                <RadzenAxisTitle Text="Nombre d'Etapes"/>
+                            </RadzenValueAxis>
+                        </RadzenChart>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Bienvenue !</h1>
+        <p>Connectez-vous pour accéder au CTF !</p>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     List<CTFUsers> Users;
@@ -49,12 +56,14 @@ Voilà un petit résumé du CTF en cours :
     List<CTFEtapes> EtapesCompleted;
     List<CTFEtapes> EtapesNotCompleted;
     List<CTFScoring> Scoring;
+    CTFUsers HelloUser;
     bool CantLoadScore;
     
     string MyUsers;
     int MyUsersId;
     int MyTeamId;
     string MyTeamName;
+    string MailUser;
     
 
     protected override async Task OnInitializedAsync()
@@ -64,8 +73,12 @@ Voilà un petit résumé du CTF en cours :
         Users = await _UsersServices.GetUsersAsync();
         Teams = await _TeamServices.GetTeamsAsync();
         Etapes = await _EtapesServices.GetEtapesAsync();
+
+        MailUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+
+        HelloUser = _UsersServices.GetUserByMail(MailUser);
         
-        MyUsers = "Rhenar";
+        MyUsers = HelloUser.Pseudo;
         MyUsersId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.Id).FirstOrDefault();
         MyTeamId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.TeamId).FirstOrDefault();
         MyTeamName = Teams.Where(x => x.Id == MyTeamId).Select(x => x.Name).FirstOrDefault();
@@ -93,5 +106,5 @@ Voilà un petit résumé du CTF en cours :
 
     }
     
-
+    
 }

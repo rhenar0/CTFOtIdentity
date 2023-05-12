@@ -1,4 +1,4 @@
-namespace CTFOt.SQLManagement.Services;
+namespace CTFOtIdentity.SQLManagement.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Context;
