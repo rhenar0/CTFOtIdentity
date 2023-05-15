@@ -160,7 +160,7 @@ public class CTFContext : DbContext
         {
             new CTFGlobal
             {
-                Id = 1, Dend = "2021-01-01 00:00:00", Dstart = "2021-01-01 00:00:00" 
+                Id = 1, Duration = "2023-04-15 10:00:00"
             }
         };
     }
