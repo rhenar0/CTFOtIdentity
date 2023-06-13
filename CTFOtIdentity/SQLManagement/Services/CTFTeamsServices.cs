@@ -1,3 +1,5 @@
+using Radzen;
+
 namespace CTFOtIdentity.SQLManagement.Services;
 
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ public interface ICTFTeamServices
     Task<CTFTeams> AddTeamsAsync(CTFTeams teams);
     Task<CTFTeams> UpdateTeamsAsync(CTFTeams teams);
     Task DeleteTeamsAsync(CTFTeams teams);
+    Task<List<CTFTeams>> GetTeamsAsyncScoring();
 }
 
 public class CTFTeamsServices : ICTFTeamServices 
@@ -25,6 +28,11 @@ public class CTFTeamsServices : ICTFTeamServices
     public async Task<List<CTFTeams>> GetTeamsAsync()
     {
         return await dbContext.CTFTeams.ToListAsync();
+    }
+    
+    public async Task<List<CTFTeams>> GetTeamsAsyncScoring()
+    {
+        return await dbContext.CTFTeams.Where(l => l.Id != 999).ToListAsync();
     }
     
     public async Task<CTFTeams> AddTeamsAsync(CTFTeams teams)

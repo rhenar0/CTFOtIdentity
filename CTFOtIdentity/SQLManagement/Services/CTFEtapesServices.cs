@@ -30,7 +30,7 @@ public class CTFEtapesServices : ICTFEtapesServices
     {
         return await dbContext.CTFEtapes.ToListAsync();
     }
-    
+
     public async Task<CTFEtapes> AddEtapesAsync(CTFEtapes etapes)
     {
         try
@@ -165,7 +165,7 @@ public class CTFEtapesServices : ICTFEtapesServices
         {
             try
             {
-                if (!etapesCompeted.Contains(a))
+                if (!etapesCompeted.Where(l => l.Id == a.Id).Any())
                 {
                     ReturnValue.Add(a);
                 }

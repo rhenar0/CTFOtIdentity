@@ -7,22 +7,35 @@
 @inject ICTFEtapesServices _EtapesServices
 @inject ICTFScoringServices _ScoringServices
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+@inject NavigationManager _nav
 
 <PageTitle>Accueil</PageTitle>
 <AuthorizeView>
     <Authorized>
         <h1>Bienvenue <b>@MyUsers</b> !</h1>
-        <h2>Ton équipe est <b>@MyTeamName</b></h2>
+        <h2>Ton équipe est <RadzenBadge Shade="Shade.Lighter" BadgeStyle="BadgeStyle.Secondary" Text=@MyTeamName /></h2>
 
-        Voilà un petit résumé du CTF en cours pour ton équipe :
+        Cette plateforme permet de venir valider vos challenges et consulter votre avancée. Il suffit de vous rendre sur l'onglet "Challenges" pour ceux étant disponibles et l'onglet "Score" pour consulter l'avancée du CTF.<br />
+        
+        <h3>Quelques règles :</h3>
+        
+        <ul>
+            <li>Pas de discussion sur le défi actif qui pourrait aider les autres équipes (indices, partage de drapeaux, etc) aka pas de tricherie.</li>
+            <li>Ne pas attaquer le tableau d'affichage.</li>
+            <li>Les seuls IP autorisés à être attaqués sont sous la forme de 192.168.208.16/17/18).</li>
+            <li>Ne pas forcer brutalement les défis en ligne.</li>
+            <li>Merci de respecter les autres ! Pas de racisme, pas d'homophobie, pas de sexisme et pas d'autres formes de discrimination.</li>
+            <li>Pas de publicité</li>
+            <li>Le fuzzing est autorisé.</li>
+        </ul>
 
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
                     @if (CantLoadScore)
                     {
-                        <p>Il n'y a pas encore de données à afficher</p>
-                    }
+                        //<p>Il n'y a pas encore de données à afficher</p>
+                    }   
                     else
                     {
                         <RadzenChart>
@@ -45,7 +58,7 @@
     </Authorized>
     <NotAuthorized>
         <h1>Bienvenue !</h1>
-        <p>Connectez-vous pour accéder au CTF !</p>
+        <p>Connectez-vous pour accéder au CTF ! <RadzenButton Variant="Variant.Outlined" Click=@(() => _nav.NavigateTo("Identity/Account/Login", true)) Icon="login" Text="S'Identifier" ButtonStyle="ButtonStyle.Primary" /> </p>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -64,7 +77,7 @@
     int MyTeamId;
     string MyTeamName;
     string MailUser;
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,38 +86,57 @@
         Users = await _UsersServices.GetUsersAsync();
         Teams = await _TeamServices.GetTeamsAsync();
         Etapes = await _EtapesServices.GetEtapesAsync();
+        bool Dev_Exp = false;
+        CantLoadScore = true;
 
-        MailUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
-
-        HelloUser = _UsersServices.GetUserByMail(MailUser);
-        
-        MyUsers = HelloUser.Pseudo;
-        MyUsersId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.Id).FirstOrDefault();
-        MyTeamId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.TeamId).FirstOrDefault();
-        MyTeamName = Teams.Where(x => x.Id == MyTeamId).Select(x => x.Name).FirstOrDefault();
-        
-        Scoring = await _ScoringServices.GetScoringByTeamAsync(MyTeamId);
-        foreach (var a in Scoring)
+        if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
-            if (a.Points > 0)
+
+            try
             {
-                CantLoadScore = false;
-                break;
-            } else
-            {
-                CantLoadScore = true;
+                MailUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+                HelloUser = _UsersServices.GetUserByMail(MailUser);
             }
-        }
-        try
-        {
-            EtapesCompleted = _EtapesServices.GetItCompleted(Scoring);
-            EtapesNotCompleted = _EtapesServices.GetItNonCompleted(EtapesCompleted);
-        } catch (Exception e)
-        {
-            CantLoadScore = true;
+            catch (Exception e)
+            {
+                MailUser = "";
+                HelloUser = null;
+            }
+
+
+            MyUsers = HelloUser.Pseudo;
+            MyUsersId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.Id).FirstOrDefault();
+            MyTeamId = Users.Where(x => x.Pseudo == MyUsers).Select(x => x.TeamId).FirstOrDefault();
+            MyTeamName = Teams.Where(x => x.Id == MyTeamId).Select(x => x.Name).FirstOrDefault();
+
+            if (Dev_Exp)
+            {
+
+                Scoring = await _ScoringServices.GetScoringByTeamAsync(MyTeamId);
+                foreach (var a in Scoring)
+                {
+                    if (a.Points > 0)
+                    {
+                        CantLoadScore = false;
+                        break;
+                    }
+                    else
+                    {
+                        CantLoadScore = true;
+                    }
+                }
+                try
+                {
+                    EtapesCompleted = _EtapesServices.GetItCompleted(Scoring);
+                    EtapesNotCompleted = _EtapesServices.GetItNonCompleted(EtapesCompleted);
+                }
+                catch (Exception e)
+                {
+                    CantLoadScore = true;
+                }
+            }
         }
 
     }
-    
-    
+
 }

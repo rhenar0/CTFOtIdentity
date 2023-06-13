@@ -1,6 +1,8 @@
 @using CTFOtIdentity.SQLManagement.Services
 @using CTFOtIdentity.SQLManagement.Definitions
 @using System.Security.Claims
+@using System.Text.RegularExpressions
+@using System.Web
 @inject NotificationService NotificationService
 @inject ICTFEtapesServices _etapesServices
 @inject ICTFRessourcesServices _ressourcesServices
@@ -20,59 +22,63 @@
                 {   
                     @isDone(1, eta.Id);
                     <RadzenTabsItem Text=@($"{eta.Name} - ({eta.Points})") Icon="@setIcon">
-                        <RadzenCard Class="rz-my-1 rz-mx-auto" Style="width: auto">
+                        <RadzenCard Class="rz-my-1 rz-mx-auto" Style="  width: auto">
                             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-2">
-                                <RadzenImage Path=@eta.Img Style="width: 100px; height: 100px; border-radius: 50%;"/>
+                                <RadzenImage Path=@eta.Img Style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;"/>
                                 <RadzenStack Gap="0">
                                     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-1 rz-my-0">Nom du challenge</RadzenText>
                                     <RadzenText TextStyle="TextStyle.Body1"><b>@eta.Name</b></RadzenText>
                                     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-3 rz-mb-0">Description</RadzenText>
-                                    <RadzenText TextStyle="TextStyle.Body1"><b>@eta.Description</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1"><b> @((MarkupString)Regex.Replace(
+                                                                                    HttpUtility.HtmlEncode(@eta.Description), "\r?\n|\r", "<br />"))</b></RadzenText>
                                 </RadzenStack>
                             </RadzenStack>
-                            <RadzenCard class="rz-background-color-primary-lighter rz-shadow-0 rz-border-radius-0 rz-p-4" style="margin: 1rem">
-                                <RadzenText TextStyle="TextStyle.H6" class="rz-color-primary-light"><strong>Ressources associés</strong></RadzenText>
-                                <RadzenStack Gap="0">
-                                    <RadzenRow class="rz-text-align-center" Gap="1rem">
-                                        @if (GetRessources(eta.Id))
-                                        {
-                                            @foreach (var ent in FilesFixed)
+                            @if (GetRessources(eta.Id))
+                            {
+                                <RadzenCard class="rz-background-color-primary-lighter rz-shadow-0 rz-border-radius-0 rz-p-4" style="margin: 1rem">
+                                    <RadzenText TextStyle="TextStyle.H6" class="rz-color-secondary-dark"><strong>Ressources associés</strong></RadzenText>
+                                    <RadzenStack Gap="0">
+                                        <RadzenRow class="rz-text-align-center" Gap="1rem">
+                                            @if (GetRessources(eta.Id))
                                             {
-                                                <RadzenColumn Size="6">
-                                                    <RadzenCard Style="width: auto">
-                                                        <RadzenRow class="rz-text-align-center" Gap="1rem">
-                                                            <RadzenFormField Text="Fichiers" Style="width: 100%; height: auto;">
-                                                                <Start><RadzenImage Path="https://cdn.icon-icons.com/icons2/3953/PNG/512/folder_icon_251975.png" Style="width: 40px; height: 40px"></RadzenImage></Start>
-                                                                <ChildContent><RadzenText TextStyle="TextStyle.Body1" Style="text-align: left; margin-right: auto; margin-left: 0; display: block;" class="rz-color-primary-light">@ent.Name</RadzenText></ChildContent>
-                                                                <End><RadzenButton Click="@(args => DownloadFileFromURL(ent.Link, ent.Name))" Style="margin-left: auto; margin-right: 0; display: block;" Icon="download"/></End>
-                                                            </RadzenFormField>
-                                                        </RadzenRow>
-                                                    </RadzenCard>
-                                                </RadzenColumn>
+                                                @foreach (var ent in FilesFixed)
+                                                {
+                                                    <RadzenColumn Size="6">
+                                                        <RadzenCard Style="width: auto">
+                                                            <RadzenRow class="rz-text-align-center" Gap="1rem">
+                                                                <RadzenFormField Text="" Style="width: 100%; height: auto;">
+                                                                    <Start><RadzenImage Path="https://media.discordapp.net/attachments/850005023218991105/1118109901739262012/document_folder_icon_252039.png" Style="width: 40px; height: 40px;"></RadzenImage></Start>
+                                                                    <ChildContent><RadzenText TextStyle="TextStyle.Body1" Style="text-align: left; margin-right: auto; margin-left: 0; display: block;" class="rz-color-secondary-dark">@ent.Name</RadzenText></ChildContent>
+                                                                    <End><RadzenButton Click="@(args => DownloadFileFromURL(ent.Link, ent.Name))" Style="margin-left: auto; margin-right: 0; display: block;" class="rz-border-radius" Icon="download"/></End>
+                                                                </RadzenFormField>
+                                                            </RadzenRow>
+                                                        </RadzenCard>
+                                                    </RadzenColumn>
+                                                }
                                             }
-                                        }
-                                        @if (GetRessources(eta.Id))
-                                        {
-                                            @foreach (var ent in LinksFixed)
+                                            @if (GetRessources(eta.Id))
                                             {
-                                                <RadzenColumn Size="6">
-                                                    <RadzenCard Style="width: auto">
-                                                        <RadzenRow class="rz-text-align-center" Gap="1rem">
-                                                            <RadzenFormField Text="Site Web" Style="width: 100%; height: auto;">
-                                                                <Start><RadzenImage Path="https://cdn.icon-icons.com/icons2/3953/PNG/512/server_icon_251805.png" Style="width: 40px; height: 40px"></RadzenImage></Start>
-                                                                <ChildContent><RadzenText TextStyle="TextStyle.Body1" Style="text-align: left; margin-right: auto; margin-left: 0; display: block;" class="rz-color-primary-light">@ent.Name</RadzenText></ChildContent>
-                                                                <End><RadzenButton Click="@(args => OpenLink(ent.Link))" Style="margin-left: auto; margin-right: 0; display: block;" Icon="open_in_new"/></End>
-                                                            </RadzenFormField>
-                                                        </RadzenRow>
-                                                    </RadzenCard>
-                                                </RadzenColumn>
+                                                @foreach (var ent in LinksFixed)
+                                                {
+                                                    <RadzenColumn Size="6">
+                                                        <RadzenCard Style="width: auto">
+                                                            <RadzenRow class="rz-text-align-center" Gap="1rem">
+                                                                <RadzenFormField Text="" Style="width: 100%; height: auto;">
+                                                                    <Start><RadzenImage Path="https://cdn.discordapp.com/attachments/850005023218991105/1118110135840149534/wondicon-ui-free-website_111210.png" Style="width: 40px; height: 40px"></RadzenImage></Start>
+                                                                    <ChildContent><RadzenText TextStyle="TextStyle.Body1" Style="text-align: left; margin-right: auto; margin-left: 0; display: block;" class="rz-color-secondary-dark">@ent.Name</RadzenText></ChildContent>
+                                                                    <End><RadzenButton Click="@(args => OpenLink(ent.Link))" Style="margin-left: auto; margin-right: 0; display: block;" class="rz-border-radius" Icon="open_in_new"/></End>
+                                                                </RadzenFormField>
+                                                            </RadzenRow>
+                                                        </RadzenCard>
+                                                    </RadzenColumn>
+                                                }
                                             }
-                                        }
-                                    </RadzenRow>
-                                </RadzenStack>
-                            </RadzenCard>
+                                        </RadzenRow>
+                                    </RadzenStack>
+                                </RadzenCard>
+                            }
                             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" AlignItems="AlignItems.Center" Gap="0rem">
-                                <RadzenFormField Text="Flag" Style="width: 100%; height: auto;">
+                                <RadzenFormField Text="" Style="width: 100%; height: auto;">
                                     <Start><RadzenIcon Icon="flag"></RadzenIcon></Start>
                                     <ChildContent><RadzenTextBox @bind-Value="@flag" Style="width: 100%;"/></ChildContent>
                                     <End><RadzenButton Click=@(args => OnSubmitFlag(flag, idUser, eta.Name, eta.Id)) Icon="check" Style="width: 5px; height: 5px;"/></End>
@@ -141,7 +147,11 @@
         try {
             FilesFixed = _ressourcesServices.GetRessourcesByEtapesAndTypeAsync(eta, "FILES");
             LinksFixed = _ressourcesServices.GetRessourcesByEtapesAndTypeAsync(eta, "LINK");
-            return true;
+            if (FilesFixed.Count == 0 && LinksFixed.Count == 0)
+            {
+                return false;
+            }
+                return true;
         } catch (Exception e) {
             Console.WriteLine(e);
             return false;

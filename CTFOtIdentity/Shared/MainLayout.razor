@@ -18,7 +18,7 @@
             <RadzenHeader>
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
                     <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
-                    <RadzenLabel Text="CTFOt" />
+                    <RadzenLabel Text="Challenge Francilien" />
                     <RadzenButton ButtonStyle="ButtonStyle.Secondary" Shade="Shade.Lighter" class="rz-shadow-0" Style="display: block; margin-left: auto; margin-right: 20px">
                             Timer
                             <RadzenBadge BadgeStyle="BadgeStyle.Secondary" IsPill="@true" Text="@GetRemainingTime(GetDate)" class="rz-ml-2" />
@@ -36,7 +36,7 @@
                         <Authorized>
                             <RadzenPanelMenuItem Text="Challenges" Icon="receipt" Path="Challenges"/>
                             <RadzenPanelMenuItem Text="Score" Icon="scoreboard" Path="Scoring"/>
-                            <RadzenPanelMenuItem Text="Mon profile" Icon="person" Path="Identity/Account/Manage"/>
+                            <RadzenPanelMenuItem Text="Mon profil" Icon="person" Path="Identity/Account/Manage"/>
                         </Authorized>
                     </AuthorizeView>
                 </RadzenPanelMenu>
@@ -54,16 +54,6 @@
         @code {
             bool sidebar1Expanded = true;
         }
-            
-        @code {
-
-            async Task OpenLogin() 
-            {   
-                await DialogService.OpenSideAsync<DialogSideOpen_Login>("Login", new Dictionary<string, object> {}, new SideDialogOptions{ Position = DialogPosition.Right});
-            }
-
-        }
-            
     </main>
 </div>
 

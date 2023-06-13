@@ -25,10 +25,9 @@
                                     <RadzenColumn Size="4">
                                         <RadzenCard Style="flex: 1;">
                                             <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
-                                                <RadzenImage Path=@chall.Image Style="width: 80px; height: 80px; border-radius: 50%"/>
+                                                <RadzenImage Path=@chall.Image Style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;"/>
                                                 <RadzenStack>
                                                     <RadzenText TextStyle="TextStyle.Subtitle1" TagName="TagName.P" TextAlign="TextAlign.Center">@chall.Name</RadzenText>
-                                                    <RadzenText TextStyle="TextStyle.Body2" TextAlign="TextAlign.Center">Petite description</RadzenText>
                                                     <RadzenButton Click=@(args => OpenChall(chall.Name, chall.Id))>Lancer !</RadzenButton>
                                                 </RadzenStack>
                                             </RadzenStack>
@@ -54,7 +53,7 @@
 
     async Task OpenChall(string name, int eid) 
     {   
-        await DialogService.OpenAsync<DialogCardOpen_ShowEtapes>(name, new Dictionary<string, object> {{"eid", eid}}, new DialogOptions() { Width = "800px", Height = "800px", Resizable = false, Draggable = false });
+        await DialogService.OpenAsync<DialogCardOpen_ShowEtapes>(name, new Dictionary<string, object> {{"eid", eid}}, new DialogOptions() { Width = "850px", Height = "800px", Resizable = false, Draggable = false });
     }
     
     protected override async Task OnInitializedAsync()

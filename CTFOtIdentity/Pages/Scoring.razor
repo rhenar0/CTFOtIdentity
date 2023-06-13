@@ -76,7 +76,7 @@
     {
         await base.OnInitializedAsync();
 
-        Teams = await _TeamServices.GetTeamsAsync();
+        Teams = await _TeamServices.GetTeamsAsyncScoring();
         Players = await _UsersServices.GetUsersAsync();
         Etapes = await _EtapesServices.GetEtapesAsync();
         ScoreAh = await _ScoringServices.GetScoringAsync();
