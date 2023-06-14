@@ -8,6 +8,7 @@
 @inject ICTFRessourcesServices _ressourcesServices
 @inject ICTFScoringServices _flagServices
 @inject ICTFUsersServices _UsersServices
+@using StatsdClient;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
 
 @inject IJSRuntime JSRuntime;
@@ -173,17 +174,45 @@
 
     async Task OnSubmitFlag(string flag, int id, string nameChal, int chalId)
     {
+        
+        var dogstatsdConfig = new StatsdConfig
+        {
+            StatsdServerName = "127.0.0.1",
+            StatsdPort = 8125,
+            ServiceName = "CTFOtIdentity"
+        };
+        
         response = await _etapesServices.SubmitFlagAsync(flag, id, chalId);
         if (response == 1)
         {
             NotificationService.Notify(NotificationSeverity.Success, $"Flag validé", $"Vous avez validé le flag du challenge {nameChal}");
+            
+            using (var service = new DogStatsdService())
+            {    
+                if (!service.Configure(dogstatsdConfig))
+                    throw new InvalidOperationException("Cannot initialize DogstatsD. Set optionalExceptionHandler argument in the `Configure` method for more information.");
+                service.Event("Nouvelle validation de flag !", "Challenge validé avec succès", alertType: "success", tags: new []{nameChal, MailUser});
+            }
+            
         } else if (response == 2)
         {
             NotificationService.Notify(NotificationSeverity.Info, $"Flag déjà validé", $"Vous avez déjà validé le flag du challenge {nameChal}");
+            using (var service = new DogStatsdService())
+            {    
+                if (!service.Configure(dogstatsdConfig))
+                    throw new InvalidOperationException("Cannot initialize DogstatsD. Set optionalExceptionHandler argument in the `Configure` method for more information.");
+                service.Event("Flag déjà validé", "Challenge déjà validé avec succès", alertType: "warn", tags: new []{nameChal, MailUser});
+            }
         }
         else
         {
             NotificationService.Notify(NotificationSeverity.Error, $"Flag invalide", $"Le flag que vous avez entré est invalide");
+            using (var service = new DogStatsdService())
+            {    
+                if (!service.Configure(dogstatsdConfig))
+                    throw new InvalidOperationException("Cannot initialize DogstatsD. Set optionalExceptionHandler argument in the `Configure` method for more information.");
+                service.Event("Flag du challenge invalide", "Challenge invalide", alertType: "error", tags: new []{nameChal, MailUser});
+            }
         }
     }
     

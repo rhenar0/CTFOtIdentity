@@ -47,6 +47,14 @@ public class CTFContext : DbContext
             new CTFScoring
             {
                 Id = 3, IdTeam = 3, IdEtape = 999, IdPlayer = 16, Points = 0, DateTime = "2023-06-14 15:30:00"
+            },
+            new CTFScoring
+            {
+                Id = 4, IdTeam = 4, IdEtape = 999, IdPlayer = 18, Points = 0, DateTime = "2023-06-14 15:30:00"
+            },
+            new CTFScoring
+            {
+                Id = 5, IdTeam = 999, IdEtape = 999, IdPlayer = 20, Points = 0, DateTime = "2023-06-14 15:30:00"
             }
         };
     }
@@ -69,7 +77,7 @@ public class CTFContext : DbContext
             },
             new CTFRessources
             {
-                Id = 4, Name = "Site Web", Link = "http://192.168.208.17/", Type = "LINK", IdAssociatedEta = 7
+                Id = 4, Name = "Site Web", Link = "http://192.168.208.17:3344/login", Type = "LINK", IdAssociatedEta = 7
             },
             new CTFRessources
             {
@@ -197,6 +205,10 @@ public class CTFContext : DbContext
             new CTFUsers
             {
                 Id = 27, Pseudo = "Valentine", Mail="valentine.pernot@oteria.fr", Score = 0, AssignedChalls = "{}", ChkPassword = "a7e4ec9e259246db346ac88b10f32901", TeamId = 999
+            },
+            new CTFUsers
+            {
+                Id = 28, Pseudo = "Romain", Mail="romain.burel@oteria.fr", Score = 0, AssignedChalls = "{}", ChkPassword = "a7e4ec9e259246db346ac88b10f32901", TeamId = 999
             }
         };
     }
@@ -312,11 +324,11 @@ public class CTFContext : DbContext
             },
             new CTFEtapes
             {
-                Id = 10, Name = "The Entry", Actif = true, Description = "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{Ym9uam91cmxlc2xvdXN0aXF1ZXN2b3Vzc2F2ZXpxdWV2b3Vz6nRlc2Ryb2xlPw==}", Flag = "OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}", Img = "https://kagi.com/proxy/criquet-oreille-cauchemar-jiminy.gif?c=qCsIsNsCPK2EG-5tqKDsPj-nT0VC9UFMOm38yykNCVkMmpcP4jc6JopGXpUWDdX4Zp9qVd8JYA831XDwJs98cuVEq_vudsAI4CJ4kmetM7Wyw9MgTpIDgubGtZScdD1wPo2jx281jSQc1jrj0kKCxQ%3D%3D", LinkedChalls = 4, Order = 1, Points = 50, Categorie = "OT"
+                Id = 10, Name = "The Entry", Actif = true, Description = "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{MTkyLjE2OC4xLjE2L29oY291Y291bGVzY29wYWlucw==}", Flag = "OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}", Img = "https://kagi.com/proxy/criquet-oreille-cauchemar-jiminy.gif?c=qCsIsNsCPK2EG-5tqKDsPj-nT0VC9UFMOm38yykNCVkMmpcP4jc6JopGXpUWDdX4Zp9qVd8JYA831XDwJs98cuVEq_vudsAI4CJ4kmetM7Wyw9MgTpIDgubGtZScdD1wPo2jx281jSQc1jrj0kKCxQ%3D%3D", LinkedChalls = 4, Order = 1, Points = 50, Categorie = "OT"
             },
             new CTFEtapes
             {
-                Id = 11, Name = "Outguess", Actif = true, Description = "Il semblerait qu'ils adorent les images ici ! Encore une autre... \n\nFormat du flag : OTH{fezfzefzefze.onion}", Flag = "OTH{loqt6lh5n6wezgetjjhgz7ps43bsvwv3gz75onsbmvqpchqqmj3kwzyd.onion}", Img = "https://kagi.com/proxy/latest?c=KuL4k4ESLwwqNjT2PZ7j6wo1XWKHMG-wlO-H94mCuQtna7sY6pang3SFZGs3Egq9ocolsPf6VY2xYpBFy-xHQFxLhE_l5oEZZdzXuO_mvT8txNU1-H0hLLl6POsM_TCM25fRRptkTAsXv9NGpWK4FySG0VioKCvvVlNrYqXSsWU%3D", LinkedChalls = 4, Order = 2, Points = 150, Categorie = "OT"
+                Id = 11, Name = "Outguess", Actif = true, Description = "Il semblerait qu'ils adorent les images ici ! Encore une autre... \n\nFormat du flag : OTH{fezfzefzefze.onion}", Flag = "OTH{w5yp7yah7q4n42z553arolx2r6dcogz5tezzyao52cej37tcueuptxyd.onion}", Img = "https://kagi.com/proxy/latest?c=KuL4k4ESLwwqNjT2PZ7j6wo1XWKHMG-wlO-H94mCuQtna7sY6pang3SFZGs3Egq9ocolsPf6VY2xYpBFy-xHQFxLhE_l5oEZZdzXuO_mvT8txNU1-H0hLLl6POsM_TCM25fRRptkTAsXv9NGpWK4FySG0VioKCvvVlNrYqXSsWU%3D", LinkedChalls = 4, Order = 2, Points = 150, Categorie = "OT"
             },
             new CTFEtapes
             {

@@ -9,9 +9,12 @@
 
     <ItemGroup>
         <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+        <None Include="bin\Debug\net7.0\Dev_CTF.db" />
+        <None Include="bin\Release\net7.0\Dev_CTF.db" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="DogStatsD-CSharp-Client" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.2" />

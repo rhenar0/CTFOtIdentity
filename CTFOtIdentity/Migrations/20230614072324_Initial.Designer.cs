@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CTFOtIdentity.Migrations
 {
     [DbContext(typeof(CTFContext))]
-    [Migration("20230613164325_Initial")]
+    [Migration("20230614072324_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -275,7 +275,7 @@ namespace CTFOtIdentity.Migrations
                             Id = 10,
                             Actif = true,
                             Categorie = "OT",
-                            Description = "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{Ym9uam91cmxlc2xvdXN0aXF1ZXN2b3Vzc2F2ZXpxdWV2b3Vz6nRlc2Ryb2xlPw==}",
+                            Description = "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{MTkyLjE2OC4xLjE2L29oY291Y291bGVzY29wYWlucw==}",
                             Flag = "OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}",
                             Img = "https://kagi.com/proxy/criquet-oreille-cauchemar-jiminy.gif?c=qCsIsNsCPK2EG-5tqKDsPj-nT0VC9UFMOm38yykNCVkMmpcP4jc6JopGXpUWDdX4Zp9qVd8JYA831XDwJs98cuVEq_vudsAI4CJ4kmetM7Wyw9MgTpIDgubGtZScdD1wPo2jx281jSQc1jrj0kKCxQ%3D%3D",
                             LinkedChalls = 4,
@@ -387,7 +387,7 @@ namespace CTFOtIdentity.Migrations
                         {
                             Id = 4,
                             IdAssociatedEta = 7,
-                            Link = "http://192.168.208.17/",
+                            Link = "http://192.168.208.17:3344/login",
                             Name = "Site Web",
                             Type = "LINK"
                         },
@@ -469,6 +469,24 @@ namespace CTFOtIdentity.Migrations
                             IdEtape = 999,
                             IdPlayer = 16,
                             IdTeam = 3,
+                            Points = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DateTime = "2023-06-14 15:30:00",
+                            IdEtape = 999,
+                            IdPlayer = 18,
+                            IdTeam = 4,
+                            Points = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DateTime = "2023-06-14 15:30:00",
+                            IdEtape = 999,
+                            IdPlayer = 20,
+                            IdTeam = 999,
                             Points = 0
                         });
                 });
@@ -850,6 +868,16 @@ namespace CTFOtIdentity.Migrations
                             ChkPassword = "a7e4ec9e259246db346ac88b10f32901",
                             Mail = "valentine.pernot@oteria.fr",
                             Pseudo = "Valentine",
+                            Score = 0L,
+                            TeamId = 999
+                        },
+                        new
+                        {
+                            Id = 28,
+                            AssignedChalls = "{}",
+                            ChkPassword = "a7e4ec9e259246db346ac88b10f32901",
+                            Mail = "romain.burel@oteria.fr",
+                            Pseudo = "Romain",
                             Score = 0L,
                             TeamId = 999
                         });

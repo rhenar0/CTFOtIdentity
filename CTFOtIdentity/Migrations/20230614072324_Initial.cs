@@ -178,7 +178,7 @@ namespace CTFOtIdentity.Migrations
                     { 7, true, "Web", "Sortez votre meilleur éditeur de texte car ça va scripter fort...\n\nFormat du flag : OTH{bouhbouh}", "OTH{hPM5OfVV73}", "https://kagi.com/proxy/python-img-113865.png?c=voW4nu_Ss_siAJXayRlkd1x6ooI6OHxRvSyWT_gIo5cJ9MDibh3pf9mualar0kQOZVl9EAKxRXOwXQWgenkgRGVEJgEe797Fn0n7onmLjFM%3D", 2, "Timing Attack", 1, 500 },
                     { 8, true, "Web", "Bon bon bon, c'est où déjà ce truc ?...\n\nFormat du flag : OTH{user_password}", "OTH{Jason_MonSuperMotDeP@sse}", "https://kagi.com/proxy/avalanche.gif?c=fRA6D874CkqQBEO81ob1I4iGGnwAjsUJVE65fgh7TvB_OM0tNdzWIc0bk3roArcSUsFMQpHnQqnb5CfpcA6jpT_TCtYEW9ebLy9L3XCHP5M%3D", 3, "Request Avalanche", 1, 250 },
                     { 9, true, "Web", "Deux biscuits dans un four. Un cookie se tourne vers l'autre cookie et dit, il fait vraiment chaud ici.\nL'autre cookie crie, Ahhh ! Un cookie qui parle !\n\nFormat du flag : OTH{bouhbouh}", "OTH{B3c@rfuL_w1tH_Jwt_1n_Pr0D}", "https://kagi.com/proxy/avalanche.gif?c=fRA6D874CkqQBEO81ob1I4iGGnwAjsUJVE65fgh7TvB_OM0tNdzWIc0bk3roArcSUsFMQpHnQqnb5CfpcA6jpT_TCtYEW9ebLy9L3XCHP5M%3D", 3, "JWT", 2, 400 },
-                    { 10, true, "OT", "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{Ym9uam91cmxlc2xvdXN0aXF1ZXN2b3Vzc2F2ZXpxdWV2b3Vz6nRlc2Ryb2xlPw==}", "OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}", "https://kagi.com/proxy/criquet-oreille-cauchemar-jiminy.gif?c=qCsIsNsCPK2EG-5tqKDsPj-nT0VC9UFMOm38yykNCVkMmpcP4jc6JopGXpUWDdX4Zp9qVd8JYA831XDwJs98cuVEq_vudsAI4CJ4kmetM7Wyw9MgTpIDgubGtZScdD1wPo2jx281jSQc1jrj0kKCxQ%3D%3D", 4, "The Entry", 1, 50 },
+                    { 10, true, "OT", "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{MTkyLjE2OC4xLjE2L29oY291Y291bGVzY29wYWlucw==}", "OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}", "https://kagi.com/proxy/criquet-oreille-cauchemar-jiminy.gif?c=qCsIsNsCPK2EG-5tqKDsPj-nT0VC9UFMOm38yykNCVkMmpcP4jc6JopGXpUWDdX4Zp9qVd8JYA831XDwJs98cuVEq_vudsAI4CJ4kmetM7Wyw9MgTpIDgubGtZScdD1wPo2jx281jSQc1jrj0kKCxQ%3D%3D", 4, "The Entry", 1, 50 },
                     { 11, true, "OT", "Il semblerait qu'ils adorent les images ici ! Encore une autre... \n\nFormat du flag : OTH{fezfzefzefze.onion}", "OTH{loqt6lh5n6wezgetjjhgz7ps43bsvwv3gz75onsbmvqpchqqmj3kwzyd.onion}", "https://kagi.com/proxy/latest?c=KuL4k4ESLwwqNjT2PZ7j6wo1XWKHMG-wlO-H94mCuQtna7sY6pang3SFZGs3Egq9ocolsPf6VY2xYpBFy-xHQFxLhE_l5oEZZdzXuO_mvT8txNU1-H0hLLl6POsM_TCM25fRRptkTAsXv9NGpWK4FySG0VioKCvvVlNrYqXSsWU%3D", 4, "Outguess", 2, 150 },
                     { 12, true, "OT", "Maintenant faut s'identifier ??? Et puis quoi encore ? \n\nFormat du flag : OTH{feozpfjeziofnzf.html}", "OTH{f60626d86938f3df8cbc2e53f7a1ad1154a5c6ba.html}", "https://kagi.com/proxy/identifier-les-references-d-un-outil-electroportatif-000676004-product_zoom.jpg?c=-eIzMiD35CJre_o-hD2FBAfCytz7MygLWUcxuhGcitVt4GyO_9Cn3auasH_gPSDv5-rizDI6x2WQHPb6KBj_WvBXUKnkjcwdTWDsesPH_LLBLMGm0k6lffJDiURxHlEYslHI0bLgtl02yIPlt5blMO3VBwuauM8AMJX9mSlrmQxqgHjhe6efrmwoQQsAn-3j", 4, "SQL Here I Come", 3, 150 }
                 });
@@ -196,7 +196,7 @@ namespace CTFOtIdentity.Migrations
                     { 1, 3, "https://cdn.discordapp.com/attachments/850005023218991105/1115609930272088095/weird_file.wav", "weird_file.wav", "FILES" },
                     { 2, 4, "https://media.discordapp.net/attachments/850005023218991105/1115610729173762208/image1.png?width=1220&height=1166", "image1.png", "FILES" },
                     { 3, 4, "https://media.discordapp.net/attachments/850005023218991105/1115610728397799474/image2.png?width=1062&height=1166", "image2.png", "FILES" },
-                    { 4, 7, "http://192.168.208.17/", "Site Web", "LINK" },
+                    { 4, 7, "http://192.168.208.17:3344/login", "Site Web", "LINK" },
                     { 5, 8, "http://192.168.208.18/", "Site Web", "LINK" },
                     { 6, 9, "http://192.168.208.18/", "Site Web", "LINK" },
                     { 7, 10, "http://192.168.208.16/img.png", "6602", "FILES" }
@@ -209,7 +209,9 @@ namespace CTFOtIdentity.Migrations
                 {
                     { 1, "2023-06-14 15:30:00", 999, 1, 1, 0 },
                     { 2, "2023-06-14 15:30:00", 999, 8, 2, 0 },
-                    { 3, "2023-06-14 15:30:00", 999, 16, 3, 0 }
+                    { 3, "2023-06-14 15:30:00", 999, 16, 3, 0 },
+                    { 4, "2023-06-14 15:30:00", 999, 18, 4, 0 },
+                    { 5, "2023-06-14 15:30:00", 999, 20, 999, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -255,7 +257,8 @@ namespace CTFOtIdentity.Migrations
                     { 24, "{0}", "a7e4ec9e259246db346ac88b10f32901", "julie.pereira@etu.u-pec.fr", "JuliePereira", 0L, 4 },
                     { 25, "{0}", "a7e4ec9e259246db346ac88b10f32901", "ulric.sieys@etu.u-pec.fr", "UlricSieys", 0L, 4 },
                     { 26, "{}", "a7e4ec9e259246db346ac88b10f32901", "saber.sakkhal@oteria.fr", "Saber", 0L, 999 },
-                    { 27, "{}", "a7e4ec9e259246db346ac88b10f32901", "valentine.pernot@oteria.fr", "Valentine", 0L, 999 }
+                    { 27, "{}", "a7e4ec9e259246db346ac88b10f32901", "valentine.pernot@oteria.fr", "Valentine", 0L, 999 },
+                    { 28, "{}", "a7e4ec9e259246db346ac88b10f32901", "romain.burel@oteria.fr", "Romain", 0L, 999 }
                 });
         }
 
