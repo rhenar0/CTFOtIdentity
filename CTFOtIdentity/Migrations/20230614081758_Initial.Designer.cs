@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CTFOtIdentity.Migrations
 {
     [DbContext(typeof(CTFContext))]
-    [Migration("20230614072324_Initial")]
+    [Migration("20230614081758_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -275,8 +275,8 @@ namespace CTFOtIdentity.Migrations
                             Id = 10,
                             Actif = true,
                             Categorie = "OT",
-                            Description = "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{MTkyLjE2OC4xLjE2L29oY291Y291bGVzY29wYWlucw==}",
-                            Flag = "OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}",
+                            Description = "Vous venez de recevoir une mystérieuse image et vous savez qu'elle cache quelque chose... peut-être qu'en fouillant dedans...\n\nFormat du flag : OTH{aHR0cDovL2JsdWUtcHJvamVjdC5jbzpYWFhYL2luZGV4Lmh0bWw=}",
+                            Flag = "OTH{MTkyLjE2OC4yMDguMTYvb2hjb3Vjb3VsZXNjb3BhaW5z}",
                             Img = "https://kagi.com/proxy/criquet-oreille-cauchemar-jiminy.gif?c=qCsIsNsCPK2EG-5tqKDsPj-nT0VC9UFMOm38yykNCVkMmpcP4jc6JopGXpUWDdX4Zp9qVd8JYA831XDwJs98cuVEq_vudsAI4CJ4kmetM7Wyw9MgTpIDgubGtZScdD1wPo2jx281jSQc1jrj0kKCxQ%3D%3D",
                             LinkedChalls = 4,
                             Name = "The Entry",
@@ -288,8 +288,8 @@ namespace CTFOtIdentity.Migrations
                             Id = 11,
                             Actif = true,
                             Categorie = "OT",
-                            Description = "Il semblerait qu'ils adorent les images ici ! Encore une autre... \n\nFormat du flag : OTH{fezfzefzefze.onion}",
-                            Flag = "OTH{loqt6lh5n6wezgetjjhgz7ps43bsvwv3gz75onsbmvqpchqqmj3kwzyd.onion}",
+                            Description = "Il semblerait qu'ils adorent les images ici ! Encore une autre... \nVous devez trouver une adresse en .onion, le flag est l'adresse sans le .onion à la fin. \n\nFormat du flag : OTH{fezfzefzefze}",
+                            Flag = "OTH{w5yp7yah7q4n42z553arolx2r6dcogz5tezzyao52cej37tcueuptxyd}",
                             Img = "https://kagi.com/proxy/latest?c=KuL4k4ESLwwqNjT2PZ7j6wo1XWKHMG-wlO-H94mCuQtna7sY6pang3SFZGs3Egq9ocolsPf6VY2xYpBFy-xHQFxLhE_l5oEZZdzXuO_mvT8txNU1-H0hLLl6POsM_TCM25fRRptkTAsXv9NGpWK4FySG0VioKCvvVlNrYqXSsWU%3D",
                             LinkedChalls = 4,
                             Name = "Outguess",
@@ -301,8 +301,8 @@ namespace CTFOtIdentity.Migrations
                             Id = 12,
                             Actif = true,
                             Categorie = "OT",
-                            Description = "Maintenant faut s'identifier ??? Et puis quoi encore ? \n\nFormat du flag : OTH{feozpfjeziofnzf.html}",
-                            Flag = "OTH{f60626d86938f3df8cbc2e53f7a1ad1154a5c6ba.html}",
+                            Description = "Maintenant faut s'identifier ??? Et puis quoi encore ? \nVous devez trouver le nom d'un fichier en .html, le flag est le nom sans le .html à la fin. \n\nFormat du flag : OTH{feozpfjeziofnzf}",
+                            Flag = "OTH{f60626d86938f3df8cbc2e53f7a1ad1154a5c6ba}",
                             Img = "https://kagi.com/proxy/identifier-les-references-d-un-outil-electroportatif-000676004-product_zoom.jpg?c=-eIzMiD35CJre_o-hD2FBAfCytz7MygLWUcxuhGcitVt4GyO_9Cn3auasH_gPSDv5-rizDI6x2WQHPb6KBj_WvBXUKnkjcwdTWDsesPH_LLBLMGm0k6lffJDiURxHlEYslHI0bLgtl02yIPlt5blMO3VBwuauM8AMJX9mSlrmQxqgHjhe6efrmwoQQsAn-3j",
                             LinkedChalls = 4,
                             Name = "SQL Here I Come",

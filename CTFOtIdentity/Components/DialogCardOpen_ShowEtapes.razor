@@ -140,7 +140,7 @@
 
     private async Task OpenLink(string url)
     {
-        await JSRuntime.InvokeAsync<object>("open", url, "_blank");
+        await JSRuntime.InvokeAsync<object>("open", url);
     }
     
     public bool GetRessources(int eta)
